@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ff1493">
+    <title>💝 Proposal Link Generator | Send a Cute Proposal Message</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/emoji/48/heart-with-ribbon.png" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Link Generator Section -->
+      <div class="generator-section" id="generatorSection">
+        <h1>💝 Proposals Link Generator</h1>
+        <p class="subtitle">Create personalized proposals for your beloved Person!</p>
+
+        <form id="linkForm">
+          <div class="form-group">
+            <label for="fromName">Your Name:</label>
+            <input type="text" id="fromName" placeholder="e.g., John" autocomplete="off" required>
+          </div>
+
+          <div class="form-group">
+            <label for="toName">Valentine Name:</label>
+            <input type="text" id="toName" placeholder="e.g., Sarah" autocomplete="off" required>
+          </div>
+
+          <button type="submit" class="btn">✨ Click Generate Link</button>
+          <p class="credit-message">
+            Created by
+            <a class="credit-color" href="https://www.instagram.com/Shariful797" target="_blank">Instagram</a>,
+            <a class="credit-color" href="https://www.fb.com/Shariful797" target="_blank">Facebook</a>
+          </p>
+        </form>
+
+        <div class="generated-link" id="generatedLink">
+          <h3 style="color: #667eea; margin-bottom: 10px">
+            🎉 Your Link is Ready!
+          </h3>
+          <div class="link-container" id="linkDisplay"></div>
+          <button class="btn copy-btn" id="copyBtn">📋 Copy Link</button>
+          <button class="btn" id="createAnother">Create Another Link</button>
+        </div>
+      </div>
+
+      <!-- Valentine Popup Section -->
+      <div class="valentine-section" id="valentineSection">
+        <div class="valentine-content" id="valentineContent">
+          <div class="cat-container">
+            <div class="heart-decoration">💖</div>
+            <div class="cat-face">
+              <div class="cat-ear-left"></div>
+              <div class="cat-ear-right"></div>
+              <div class="cat-eyes">
+                <div class="cat-eye"></div>
+                <div class="cat-eye"></div>
+              </div>
+              <div class="cat-nose"></div>
+              <div class="cat-blush-left"></div>
+              <div class="cat-blush-right"></div>
+            </div>
+          </div>
+
+          <h2 class="valentine-title">
+            <span id="toNameDisplay">Hey there</span>, will you be my valentine?
+          </h2>
+
+		<div class="button-container">
+		  <button class="valentine-btn yes-btn" id="yesBtn" aria-label="Yes button">Yes</button>
+		  <button class="valentine-btn no-btn" id="noBtn" aria-label="No button">No</button>
+
+		  <div class="no-tooltip" id="noTooltip">
+		    "NO" seems a bit shy 😈
+		  </div>
+		  
+		</div>
+          <p class="credit-message">
+            Created by
+            <a class="credit-color" href="https://www.instagram.com/Shariful797" target="_blank" rel="noopener">Instagram</a>,
+            <a class="credit-color" href="https://www.fb.com/Shariful797" target="_blank" rel="noopener">Facebook</a>
+          </p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+          <!-- Glitter Shower -->
+          <div class="glitter-container">
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+            <div class="glitter"></div>
+          </div>
+
+          <!-- GIPHY Cute Hugging Cats Sticker -->
+          <div class="kissing-animation" id="kissingAnimation">
+            <img
+              src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExd29oZnQ5ZG42NjhscHg2cXlyeTk2bTNrZWM0dG1lZW4zNW1ycjd1ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/paXjnIZYvglz2/giphy.gif"
+              alt="Cute hugging cats"
+            />
+          </div>
+
+          <h2 class="success-text">Yay! 💖</h2>
+          <p class="success-subtitle">
+            <span id="fromNameSuccess">They</span> will be so happy!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
