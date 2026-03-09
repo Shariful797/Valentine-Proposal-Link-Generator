@@ -1,105 +1,147 @@
-      // Parse URL parameters
-      function getUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-          from: params.get("from"),
-          to: params.get("to"),
-        };
-      }
+document.addEventListener("DOMContentLoaded", function() {
 
-      // Check if this is a valentine link or generator page
-      const params = getUrlParams();
-      if (params.from && params.to) {
-        // Show valentine section
-        document.getElementById("generatorSection").style.display = "none";
-        document.getElementById("valentineSection").style.display = "block";
+  // ------------------------------
+  // Parse URL parameters
+  // ------------------------------
+  function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      from: params.get("from"),
+      to: params.get("to"),
+    };
+  }
 
-        // Set custom values
-        document.getElementById("toNameDisplay").textContent = params.to;
-        document.getElementById("fromNameSuccess").textContent = params.from;
+  const params = getUrlParams();
 
-        // Initialize moving No button
-        initializeNoButton();
-      } else {
-        // Show generator section
-        initializeGenerator();
-      }
+  // ------------------------------
+  // Show Valentine Section or Generator
+  // ------------------------------
+  if (params.from && params.to) {
+    // Show valentine section
+    document.getElementById("generatorSection").style.display = "none";
+    document.getElementById("valentineSection").style.display = "block";
 
-      // Generator functionality
-	function initializeNoButton() {
-	  const noBtn = document.getElementById("noBtn");
-	  const yesBtn = document.getElementById("yesBtn");
-	  const tooltip = document.getElementById("noTooltip");
+    // Set custom values
+    document.getElementById("toNameDisplay").textContent = decodeURIComponent(params.to);
+    document.getElementById("fromNameSuccess").textContent = decodeURIComponent(params.from);
 
-	  const valentineContent = document.getElementById("valentineContent");
-	  const successMessage = document.getElementById("successMessage");
+    // Initialize moving No button
+    initializeNoButton();
+  } else {
+    // Show generator section
+    initializeGenerator();
+  }
 
-	  let tooltipTimer;
+  // ------------------------------
+  // No Button Functionality
+  // ------------------------------
+  function initializeNoButton() {
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const tooltip = document.getElementById("noTooltip");
+    const valentineContent = document.getElementById("valentineContent");
+    const successMessage = document.getElementById("successMessage");
 
-	  function showTooltip() {
-	    const rect = noBtn.getBoundingClientRect();
+    let tooltipTimer;
 
-	    tooltip.style.left = rect.left + rect.width / 2 + "px";
-	    tooltip.style.top = rect.top - 10 + "px";
+    function showTooltip() {
+      const rect = noBtn.getBoundingClientRect();
+      tooltip.style.left = rect.left + rect.width / 2 + "px";
+      tooltip.style.top = rect.top - 10 + "px";
+      tooltip.classList.add("show");
 
-	    tooltip.classList.add("show");
+      clearTimeout(tooltipTimer);
+      tooltipTimer = setTimeout(() => {
+        tooltip.classList.remove("show");
+      }, 2000);
+    }
 
-	    clearTimeout(tooltipTimer);
+    function hideTooltip() {
+      tooltip.classList.remove("show");
+      clearTimeout(tooltipTimer);
+    }
 
-	    tooltipTimer = setTimeout(() => {
-	      tooltip.classList.remove("show");
-	    }, 2000);
-	  }
+    noBtn.addEventListener("mouseenter", () => {
+      hideTooltip(); // hide previous tooltip
+      noBtn.classList.add("moving");
 
-	  function hideTooltip() {
-	    tooltip.classList.remove("show");
-	    clearTimeout(tooltipTimer);
-	  }
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
 
-	  noBtn.addEventListener("mouseenter", () => {
+      const maxX = viewportWidth - btnWidth - 20;
+      const maxY = viewportHeight - btnHeight - 20;
 
-	    hideTooltip(); // hide previous tooltip
+      const randomX = Math.max(20, Math.random() * maxX);
+      const randomY = Math.max(20, Math.random() * maxY);
 
-	    noBtn.classList.add("moving");
+      // Move button
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
 
-	    const viewportWidth = window.innerWidth;
-	    const viewportHeight = window.innerHeight;
+      // Show tooltip after move
+      setTimeout(() => {
+        showTooltip();
+      }, 120);
+    });
 
-	    const btnWidth = noBtn.offsetWidth;
-	    const btnHeight = noBtn.offsetHeight;
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      noBtn.dispatchEvent(new Event("mouseenter"));
+    }, { passive: false });
 
-	    const maxX = viewportWidth - btnWidth - 20;
-	    const maxY = viewportHeight - btnHeight - 20;
+    yesBtn.addEventListener("click", () => {
+      valentineContent.style.display = "none";
+      successMessage.style.display = "block";
+      setTimeout(() => {
+        document.getElementById("kissingAnimation").style.display = "block";
+      }, 300);
+    });
 
-	    const randomX = Math.max(20, Math.random() * maxX);
-	    const randomY = Math.max(20, Math.random() * maxY);
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+    });
+  }
 
-	    // move button first
-	    noBtn.style.left = randomX + "px";
-	    noBtn.style.top = randomY + "px";
+  // ------------------------------
+  // Link Generator Functionality
+  // ------------------------------
+  function initializeGenerator() {
+    const form = document.getElementById("linkForm");
+    const generatedLinkDiv = document.getElementById("generatedLink");
+    const linkDisplay = document.getElementById("linkDisplay");
+    const copyBtn = document.getElementById("copyBtn");
+    const createAnotherBtn = document.getElementById("createAnother");
 
-	    // show tooltip AFTER moving
-	    setTimeout(() => {
-	      showTooltip();
-	    }, 120);
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-	  });
+      const fromName = document.getElementById("fromName").value.trim();
+      const toName = document.getElementById("toName").value.trim();
 
-	  noBtn.addEventListener("touchstart", (e) => {
-	    e.preventDefault();
-	    noBtn.dispatchEvent(new Event("mouseenter"));
-	    }, { passive: false });
+      if (!fromName || !toName) return;
 
-	  yesBtn.addEventListener("click", () => {
-	    valentineContent.style.display = "none";
-	    successMessage.style.display = "block";
+      const baseUrl = window.location.origin + window.location.pathname;
+      const link = `${baseUrl}?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`;
 
-	    setTimeout(() => {
-	      document.getElementById("kissingAnimation").style.display = "block";
-	    }, 300);
-	  });
+      linkDisplay.textContent = link;
+      generatedLinkDiv.style.display = "block";
+      generatedLinkDiv.scrollIntoView({ behavior: "smooth" });
+    });
 
-	  noBtn.addEventListener("click", (e) => {
-	    e.preventDefault();
-	  });
-	}
+    copyBtn.addEventListener("click", () => {
+      const link = linkDisplay.textContent;
+      navigator.clipboard.writeText(link).then(() => {
+        copyBtn.textContent = "✅ Copied!";
+        setTimeout(() => copyBtn.textContent = "📋 Copy Link", 2000);
+      });
+    });
+
+    createAnotherBtn.addEventListener("click", () => {
+      form.reset();
+      generatedLinkDiv.style.display = "none";
+    });
+  }
+
+});
