@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
   // ------------------------------
   // Parse URL parameters
@@ -17,18 +17,14 @@ document.addEventListener("DOMContentLoaded", function() {
   // Show Valentine Section or Generator
   // ------------------------------
   if (params.from && params.to) {
-    // Show valentine section
     document.getElementById("generatorSection").style.display = "none";
     document.getElementById("valentineSection").style.display = "block";
 
-    // Set custom values
     document.getElementById("toNameDisplay").textContent = decodeURIComponent(params.to);
     document.getElementById("fromNameSuccess").textContent = decodeURIComponent(params.from);
 
-    // Initialize moving No button
     initializeNoButton();
   } else {
-    // Show generator section
     initializeGenerator();
   }
 
@@ -36,37 +32,47 @@ document.addEventListener("DOMContentLoaded", function() {
   // No Button Functionality
   // ------------------------------
   function initializeNoButton() {
+
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
     const tooltip = document.getElementById("noTooltip");
+
     const valentineContent = document.getElementById("valentineContent");
     const successMessage = document.getElementById("successMessage");
 
     let tooltipTimer;
-
-    function showTooltip() {
-      const rect = noBtn.getBoundingClientRect();
-      tooltip.style.left = rect.left + rect.width / 2 + "px";
-      tooltip.style.top = rect.top - 10 + "px";
-      tooltip.classList.add("show");
-
-      clearTimeout(tooltipTimer);
-      tooltipTimer = setTimeout(() => {
-        tooltip.classList.remove("show");
-      }, 2000);
-    }
 
     function hideTooltip() {
       tooltip.classList.remove("show");
       clearTimeout(tooltipTimer);
     }
 
+    function showTooltipAt(x, y) {
+
+      tooltip.style.left = x + "px";
+      tooltip.style.top = y + "px";
+
+      tooltip.classList.add("show");
+
+      clearTimeout(tooltipTimer);
+
+      tooltipTimer = setTimeout(() => {
+        tooltip.classList.remove("show");
+      }, 2000);
+    }
+
     noBtn.addEventListener("mouseenter", () => {
-      hideTooltip(); // hide previous tooltip
+
+      hideTooltip();
+
+      // Save OLD button position
+      const oldRect = noBtn.getBoundingClientRect();
+
       noBtn.classList.add("moving");
 
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
+
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
@@ -80,34 +86,44 @@ document.addEventListener("DOMContentLoaded", function() {
       noBtn.style.left = randomX + "px";
       noBtn.style.top = randomY + "px";
 
-      // Show tooltip after move
+      // Show tooltip at OLD position
+      const tooltipX = oldRect.left + oldRect.width / 2;
+      const tooltipY = oldRect.top - 10;
+
       setTimeout(() => {
-        showTooltip();
-      }, 120);
+        showTooltipAt(tooltipX, tooltipY);
+      }, 50);
+
     });
 
+    // Mobile support
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       noBtn.dispatchEvent(new Event("mouseenter"));
     }, { passive: false });
 
     yesBtn.addEventListener("click", () => {
+
       valentineContent.style.display = "none";
       successMessage.style.display = "block";
+
       setTimeout(() => {
         document.getElementById("kissingAnimation").style.display = "block";
       }, 300);
+
     });
 
     noBtn.addEventListener("click", (e) => {
       e.preventDefault();
     });
+
   }
 
   // ------------------------------
   // Link Generator Functionality
   // ------------------------------
   function initializeGenerator() {
+
     const form = document.getElementById("linkForm");
     const generatedLinkDiv = document.getElementById("generatedLink");
     const linkDisplay = document.getElementById("linkDisplay");
@@ -115,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const createAnotherBtn = document.getElementById("createAnother");
 
     form.addEventListener("submit", (e) => {
+
       e.preventDefault();
 
       const fromName = document.getElementById("fromName").value.trim();
@@ -123,25 +140,42 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!fromName || !toName) return;
 
       const baseUrl = window.location.origin + window.location.pathname;
-      const link = `${baseUrl}?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`;
+
+      const link =
+        `${baseUrl}?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`;
 
       linkDisplay.textContent = link;
+
       generatedLinkDiv.style.display = "block";
+
       generatedLinkDiv.scrollIntoView({ behavior: "smooth" });
+
     });
 
     copyBtn.addEventListener("click", () => {
+
       const link = linkDisplay.textContent;
+
       navigator.clipboard.writeText(link).then(() => {
+
         copyBtn.textContent = "✅ Copied!";
-        setTimeout(() => copyBtn.textContent = "📋 Copy Link", 2000);
+
+        setTimeout(() => {
+          copyBtn.textContent = "📋 Copy Link";
+        }, 2000);
+
       });
+
     });
 
     createAnotherBtn.addEventListener("click", () => {
+
       form.reset();
+
       generatedLinkDiv.style.display = "none";
+
     });
+
   }
 
 });
